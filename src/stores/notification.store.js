@@ -1,61 +1,54 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
+import {Notification} from '../api/http/historyNotification.js';
 
-export const useNotificationStore = defineStore('notification', {
-  state: () => ({
-        notificationTypes: {
-            0: { code: 0, name: "系统通知" },
-            1: { code: 1, name: "点赞你的视频" },
-            2: { code: 2, name: "点赞你的评论" },
-            3: { code: 3, name: "回复你的评论" },
-            4: { code: 4, name: "关注了你" },
-            5: { code: 5, name: "私信了你" },
-            6: { code: 6, name: "你订阅的频道有新的动态" },
-            7: { code: 7, name: "服务器公告" }
-        },
-        unreadCount: 0,
-        lastNotification: null
-  }),
-  
-  getters: {
-    allNotificationTypes(state) {
-        return Object.values(state.notificationTypes);
-    },
-    
-    getNotificationName(state) {
-        return (code) => state.notificationTypes[code]?.name || '未知通知类型';
-    },
-    
-    lastNotificationDetails(state) {
-        return state.lastNotification !== null 
-            ? state.notificationTypes[state.lastNotification]
-            : null;
-    }
-  },
-  
-  actions: {
-    setUnreadCount(count) {
-        this.unreadCount = count;
-    },
-    
-    incrementUnreadCount() {
-        this.unreadCount++;
-    },
-    
-    resetUnreadCount() {
-        this.unreadCount = 0;
-    },
-    
-    setLastNotification(code) {
-        if (this.notificationTypes[code] !== undefined) {
-            this.lastNotification = code;
+export const useNotificationType=defineStore("ntificationType",{
+    state:()=>{
+        return {
+            count:0,
+            system:[],
+            likeOfVideo:[],
+            likeOfComment:[],
+            replyComment:[],
+            follow:[],
+            letter : [],
+            dynamic :[],
+            server:[]
         }
     },
-    
-    findNotificationCodeByName(name) {
-        const entry = Object.entries(this.notificationTypes).find(
-            ([_, value]) => value.name === name
-        );
-        return entry ? parseInt(entry[0]) : undefined;
+
+    actions :{
+        /**
+         * @param {Notification} msg 
+         */
+        add(msg){
+            switch(msg.type){
+                case 0 :
+                    this.system[this.system.length]=msg;
+                    break;
+                case 1:
+                    this.likeOfVideo[this.likeOfVideo.length]=msg;
+                    break;
+                case 2 :
+                    this.likeOfComment[this.likeOfComment.length]=msg;
+                    break;
+                case 3 :
+                    this.replyComment[this.replyComment.length]=msg;
+                    break;
+                case 4 :
+                    this.follow[this.follow.length]=msg;
+                    break;
+                case 5 :
+                    this.letter[this.letter.length]=msg;
+                    break;
+                case 6 :
+                    this.dynamic[this.dynamic.length]=msg;
+                    break;
+                case 7 : 
+                    this.server[this.server.length]=msg;
+                    break;   
+                default :
+                    break;
+            }
+        }
     }
-  }
-});
+})

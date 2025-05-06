@@ -14,8 +14,9 @@ export class Notification{
      * @param {String} message 
      * @param {Number} type 
      * @param {Number} created 
+     * @param {Boolean} is_read
      */
-    constructor(message_id,user_id,target_id,tag_id,message,type,created){
+    constructor(message_id,user_id,target_id,tag_id,message,type,created,is_read){
         this.message_id=message_id;
         this.user_id=user_id;
         this.target_id=target_id;
@@ -23,6 +24,7 @@ export class Notification{
         this.message=message;
         this.type=type;
         this.created=created;
+        this.is_read=is_read;
     }
 }
 
