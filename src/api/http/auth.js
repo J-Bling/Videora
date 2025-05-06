@@ -4,7 +4,7 @@ import Result from './result.js'
 class AuthApi{
 
     /**
-     * 
+     * 发送验证码
      * @param {SendCodeRequest} request 
      * @returns {Result}
      */
@@ -19,7 +19,7 @@ class AuthApi{
 
 
     /**
-     * 
+     * 注册
      * @param {AuthRequest} request 
      * @returns {Result}
      */
@@ -34,7 +34,7 @@ class AuthApi{
 
 
     /**
-     * 
+     * 使用密码登陆
      * @param {AuthRequest} request 
      * @returns {Result}
      */
@@ -49,7 +49,7 @@ class AuthApi{
 
 
     /**
-     * 
+     * 使用验证码登陆
      * @param {AuthRequest} request 
      * @returns {Result}
      */

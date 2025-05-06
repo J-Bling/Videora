@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from '../util/tokenUtil.js';
+import { getToken } from '../../util/tokenUtil.js';
 import interceptor from './interceptor.js';
 
 class axiosFactory{
