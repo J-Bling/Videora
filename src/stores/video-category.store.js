@@ -23,41 +23,4 @@ export const useVideoCategoryStore = defineStore('videoCategory', {
     },
     currentCategory: 'ANIMATION'
   }),
-  
-  getters: {
-    allCategories(state) {
-        return Object.keys(state.categories);
-    },
-    
-    currentCategoryDetails(state) {
-        return state.categories[state.currentCategory];
-    },
-    
-    getCategoryInfo: (state) => (categoryKey) => {
-        return state.categories[categoryKey];
-    }
-  },
-  
-  actions: {
-    /**
-     * 
-     * @param {String} category 
-     */
-    setCurrentCategory(category) {
-        if (this.categories[category]) {
-            this.currentCategory = category;
-        }
-    },
-    
-    /**
-     * 
-     * @param {String} name 
-     * @returns 
-     */
-    findCategoryByName(name) {
-        return Object.keys(this.categories).find(
-            key => this.categories[key].name === name
-        );
-    }
-  }
 });

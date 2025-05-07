@@ -69,7 +69,7 @@ class UserDataApi{
     /**
      * 
      * @param {Number} target_id 
-     * @returns {UserResponse[]}
+     * @returns {UserResponse}
      */
     async getUserDataBase(target_id){
         try{
@@ -145,7 +145,7 @@ export class UserResponse{
      */
     constructor(id,nickname,gender,avatar_url,description,userStats,userRelation){
         this.id=id;
-        this.nicknam=nickname;
+        this.nickname=nickname;
         this.gender=gender;
         this.avatar_url=avatar_url;
         this.description=description;

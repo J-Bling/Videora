@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 
-export const useNotificationStore = defineStore('notification', {
+export const useNotificationType = defineStore('notificationType', {
   state: () => ({
         notificationTypes: {
             0: { code: 0, name: "系统通知" },

@@ -14,25 +14,27 @@ export class WebScoketNotification{
      */
     connect(callback){
         try{
-            this.socket=new WebSocket(this.url);
-            this.socket.onopen=(event)=>{
-                console.log("notification listenning ok");
-            }
-
-            this.socket.onmessage=(event)=>{
-                try{
-                    let data = JSON.parse(event.data);
-                    let messages= data.notifications; // String[]
-                    callback(messages);
-                }catch(err){
-                    console.error("JSON parse fail : ",err);
+            if(this.socket===null){
+                this.socket=new WebSocket(this.url);
+                this.socket.onopen=(event)=>{
+                    console.log("notification listenning ok");
                 }
-                
-            }
 
-            this.socket.onclose=(event)=>{
-                if(this.reconnectionSize++<5){
-                    setTimeout(()=>this.connect(),2000);
+                this.socket.onmessage=(event)=>{
+                    try{
+                        let data = JSON.parse(event.data);
+                        let messages= data.notifications; // String[]
+                        callback(messages);
+                    }catch(err){
+                        console.error("JSON parse fail : ",err);
+                    }
+                    
+                }
+
+                this.socket.onclose=(event)=>{
+                    if(this.reconnectionSize++<5){
+                        setTimeout(()=>this.connect(callback),2000);
+                    }
                 }
             }
         

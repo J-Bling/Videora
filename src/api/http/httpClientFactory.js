@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getToken } from '../../util/tokenUtil.js';
-import interceptor from './interceptor.js';
+// import interceptor from './interceptor.js';
 
 class axiosFactory{
     constructor(conentType){
@@ -10,7 +10,7 @@ class axiosFactory{
             headers:{"X-Uskey" : getToken(),"Content-Type:" : type}
         });
 
-        interceptor(this.client);
+        // interceptor(this.client);
     }
 
 

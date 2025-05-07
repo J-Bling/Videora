@@ -1,10 +1,9 @@
 import {defineStore} from 'pinia';
 import {Notification} from '../api/http/historyNotification.js';
 
-export const useNotificationType=defineStore("ntificationType",{
+export const useNotification=defineStore("ntification",{
     state:()=>{
         return {
-            count:0,
             system:[],
             likeOfVideo:[],
             likeOfComment:[],
@@ -16,35 +15,59 @@ export const useNotificationType=defineStore("ntificationType",{
         }
     },
 
+    getters:{
+        getCount(){
+            return this.system.length + this.likeOfComment.length
+                +this.likeOfVideo.length + this.replyComment.length
+                +this.follow.length + this.letter.length
+                + this.dynamic.length + this.server.length;
+        }
+    },
+
     actions :{
+        /**
+         * @param {Notification[]} messages 
+         * @param {Notification} msg 
+         */
+        contain(messages,msg){
+            if(messages.length>0) {
+                for(let i=0;i<messages.length;i++){
+                    if(messages[i].message_id===msg.message_id){
+                        return false;
+                    }
+                }
+            }
+            messages[messages.length]=msg;
+        },
+
         /**
          * @param {Notification} msg 
          */
         add(msg){
             switch(msg.type){
                 case 0 :
-                    this.system[this.system.length]=msg;
+                    this.contain(this.system,msg);
                     break;
                 case 1:
-                    this.likeOfVideo[this.likeOfVideo.length]=msg;
+                    this.contain(this.likeOfVideo,msg);
                     break;
                 case 2 :
-                    this.likeOfComment[this.likeOfComment.length]=msg;
+                    this.contain(this.likeOfComment,msg);
                     break;
                 case 3 :
-                    this.replyComment[this.replyComment.length]=msg;
+                    this.contain(this.replyComment,msg);
                     break;
                 case 4 :
-                    this.follow[this.follow.length]=msg;
+                    this.contain(this.follow,msg);
                     break;
                 case 5 :
-                    this.letter[this.letter.length]=msg;
+                    this.contain(this.letter,msg);
                     break;
                 case 6 :
-                    this.dynamic[this.dynamic.length]=msg;
+                    this.contain(this.dynamic,msg);
                     break;
                 case 7 : 
-                    this.server[this.server.length]=msg;
+                    this.contain(this.server,msg);
                     break;   
                 default :
                     break;
