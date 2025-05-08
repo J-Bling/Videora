@@ -1,47 +1,42 @@
 <template>
     <div class="nav-tabs-container">
-    <el-popover
-        placement="bottom-start"
-        :width="320"
-        trigger="hover"
-        popper-class="nav-popover"
-    >
-        <template #reference>
-        <el-button
-            class="nav-tab"
-            :type="isActive('/') ? 'primary' : 'info'"
-            @click="pushRoute('/')"
+        <el-popover
+            placement="bottom-start"
+            :width="320"
+            trigger="hover"
+            popper-class="nav-popover"
         >
-            <el-icon><House /></el-icon>
-            首页
-        </el-button>
-        </template>
-        
-        <div class="category-menu">
-        <el-row :gutter="12">
-            <el-col 
-            v-for="(category, index) in categoryList" 
-            :key="index" 
-            :span="8"
-            >
-            <el-button
-                class="category-item"
-                :type="isActive(`/video/${category.name}`) ? 'primary' : 'info'"
-                @click="pushRoute(`/video/${encodeURIComponent(category.name)}`)"
-            >
-                <span class="category-name">{{ category.name }}</span>
-                <el-tooltip 
-
-                :content="category.description" 
-                placement="right"
+            <!-- <template #reference>
+                <el-button
+                    class="nav-tab"
+                    :type="isActive('/') ? 'primary' : 'info'"
+                    @click="pushRoute('/')"
                 >
-                <el-icon class="info-icon"><InfoFilled /></el-icon>
-                </el-tooltip>
-            </el-button>
-            </el-col>
-        </el-row>
-        </div>
-    </el-popover>
+                    <el-icon><House /></el-icon>
+                    首页
+                </el-button>
+            </template> -->  
+            <div class="category-menu">
+                <el-row :gutter="12">
+                    <el-col 
+                    v-for="(category, index) in categoryList" 
+                    :key="index" 
+                    :span="8"
+                    >
+                        <el-button
+                            class="category-item"
+                            :type="isActive(`/video/${category.name}`) ? 'primary' : 'info'"
+                            @click="pushRoute(`/video/${encodeURIComponent(category.name)}`)"
+                        >
+                            <span class="category-name">{{ category.name }}</span>
+                            <el-tooltip :content="category.description" placement="right">
+                                <el-icon class="info-icon"><InfoFilled /></el-icon>
+                            </el-tooltip>
+                        </el-button>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-popover>
     </div>
 </template>
 

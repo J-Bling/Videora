@@ -1,10 +1,10 @@
 <template>
-    <div class="register-container">
+    <div class="official-register-container">
         <el-radio-group v-model="registerRequest.accountType" class="register-mode-switch">
             <el-radio-button :value="true">邮箱注册</el-radio-button>
             <el-radio-button :value="false">手机注册</el-radio-button>
         </el-radio-group>
-        
+
         <el-form label-position="top">
             <el-form-item required>
                 <el-input
@@ -14,7 +14,7 @@
                     @blur="validateForm"
                 />
             </el-form-item>
-            
+
             <el-form-item required>
                 <el-input
                     v-model="registerRequest.account"
@@ -43,7 +43,7 @@
                     </el-button>
                 </div>
             </el-form-item>
-            
+
             <el-form-item required>
                 <el-input
                     v-model="registerRequest.password"
@@ -70,13 +70,14 @@
 </template>
 
 <style scoped>
-.register-container {
+.official-register-container {
     max-width: 400px;
     margin: 0 auto;
     padding: 30px;
-    background: white;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .register-mode-switch {
@@ -97,17 +98,32 @@
 .send-code-btn {
     width: 120px;
     flex-shrink: 0;
+    background-color: #007bff;
+    color: white;
+    transition: all 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+        transform: scale(1.02);
+    }
 }
 
 .register-btn {
     width: 50%;
     display: block;
     margin: 20px auto 0;
+    background-color: #28a745;
+    color: white;
     transition: all 0.3s;
-}
 
-.register-btn.is-loading {
-    opacity: 0.8;
+    &:hover {
+        background-color: #218838;
+        transform: scale(1.02);
+    }
+
+    &.is-loading {
+        opacity: 0.8;
+    }
 }
 
 :deep(.el-input__wrapper),
@@ -124,46 +140,47 @@
 
 :deep(.el-input) {
     --el-input-height: 40px;
-    
+
     .el-input__wrapper {
         border-radius: 4px;
-        box-shadow: 0 0 0 1px var(--el-border-color);
-        
+        border: 1px solid #ced4da;
+
         &:hover {
-            box-shadow: 0 0 0 1px var(--el-color-primary);
+            border-color: #007bff;
         }
-        
+
         &.is-focus {
-            box-shadow: 0 0 0 1px var(--el-color-primary);
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
     }
 }
 </style>
+
 <script setup>
-import {auth,SendCodeRequest,AuthRequest} from '../../api/http/auth';
-import {userApi} from '../../api/http/user';
+import { auth, SendCodeRequest, AuthRequest } from '../../api/http/auth';
+import { userApi } from '../../api/http/user';
 import { ref } from 'vue';
 import { setToken } from '../../util/tokenUtil';
 import { useUserData } from '../../stores/user-stroe';
 import { useRouter } from 'vue-router';
-import {useCodeSceneStore} from '../../stores/code-scene.store';
-import {ElNotification} from 'element-plus';
+import { useCodeSceneStore } from '../../stores/code-scene.store';
+import { ElNotification } from 'element-plus';
 
 const isShowCard = ref(true);
-const time=ref(60);
+const time = ref(60);
 const isSendCoding = ref(false);
-const router= useRouter();
-const isLoading=ref(false);
+const router = useRouter();
+const isLoading = ref(false);
 const userData = useUserData();
-const registerRequest=ref({
-    nickname : "",
-    account : "",
-    accountType : true,
-    code : "",
-    password : "",
+const registerRequest = ref({
+    nickname: "",
+    account: "",
+    accountType: true,
+    code: "",
+    password: "",
 });
 const codeSceneStore = useCodeSceneStore();
-
 
 function startTimer() {
     isSendCoding.value = true;
@@ -177,52 +194,55 @@ function startTimer() {
     }, 1000);
 }
 
-function successful(msg){
+function successful(msg) {
     ElNotification({
-        title : "Success",
-        message : msg,
+        title: "Success",
+        message: msg,
         type: 'success',
     });
 }
 
-function warning(msg){
+function warning(msg) {
     ElNotification({
-        title : 'Warning',
-        message : msg,
-        type :"warning"
+        title: 'Warning',
+        message: msg,
+        type: "warning"
     })
 }
 
-function erroring(msg){
+function erroring(msg) {
     ElNotification({
-        title : "Error",
-        message : msg,
-        type : "error"
+        title: "Error",
+        message: msg,
+        type: "error"
     })
 }
 
-function isValidEmail(email){
+function isValidEmail(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
 }
 
-function isValidPhone(phone){
+function isValidPhone(phone) {
     const phoneRegex = /^1[3-9]\d{9}$/;
     return phoneRegex.test(phone);
 }
 
-function isValidPassword(password){
+function isValidPassword(password) {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordRegex.test(password);
 }
 
-function isValidCode(code){
+function isValidCode(code) {
     const codeRegex = /^\d{6}$/;
     return codeRegex.test(code);
 }
 
-function isValidNickname(nickname){
-
+function isValidNickname(username) {
+    const allowedChars = /^[a-zA-Z0-9_]+$/;
+    const isLengthValid = username.length >= 6 && username.length <= 12;
+    const hasNoSpecialChars = allowedChars.test(username);
+    return isLengthValid && hasNoSpecialChars;
 }
 
 function validateForm() {
@@ -239,40 +259,40 @@ function validateForm() {
     }
 
     if (!isValidPassword(registerRequest.value.password)) {
-            warning("密码必须至少包含8个字符,并且至少包含一个字母和一个数字");
-            return false;
+        warning("密码必须至少包含8个字符,并且至少包含一个字母和一个数字");
+        return false;
     }
 
     if (!isValidCode(registerRequest.value.code)) {
         warning("验证码必须是6位数字");
         return false;
     }
-    if(!isValidNickname(registerRequest.value.nickname)){
+    if (!isValidNickname(registerRequest.value.nickname)) {
         warning("用户名称不符合规范 不能包括特殊字符 以及在6-12个字符之间");
+        return false;
     }
     return true;
 }
 
-async function getUserData(id){
-    try{
-        if(!id) return;
+async function getUserData(id) {
+    try {
+        if (!id) return;
         const data = await userApi.getUserDataBase(id);
         console.log(data);
-        if(data){
-            userData.init(data.id,data.nickname,data.avatar_url,data.gender,data.description);
-        } 
-    }catch(err){
-        if(err.response){
+        if (data) {
+            userData.init(data.id, data.nickname, data.avatar_url, data.gender, data.description);
+        }
+    } catch (err) {
+        if (err.response) {
             erroring(err.response.data.message);
-        }else{
+        } else {
             erroring("网络错误，请稍后再试");
         }
-        console.log("getUser error :",err);
+        console.log("getUser error :", err);
     }
 }
 
-
-async function sendCode(){
+async function sendCode() {
     if (registerRequest.value.accountType) {
         if (!isValidEmail(registerRequest.value.account)) {
             warning("请输入有效的邮箱地址");
@@ -284,7 +304,7 @@ async function sendCode(){
             return;
         }
     }
-    
+
     isLoading.value = true;
     const request = new SendCodeRequest(
         registerRequest.value.account,
@@ -292,30 +312,29 @@ async function sendCode(){
         codeSceneStore.scenes.REGISTER.code
     );
     startTimer();
-    try{
-        const response =await auth.sendCode(request);
-        if(response){
-            successful("验证码已经发生 请查收");
+    try {
+        const response = await auth.sendCode(request);
+        if (response) {
+            successful("验证码已经发送 请查收");
         }
-    }catch(error){
-        if(err.response){
-            erroring(err.response.data.message);
-        }else{
+    } catch (error) {
+        if (error.response) {
+            erroring(error.response.data.message);
+        } else {
             erroring("网络错误，请稍后再试");
         }
-        console.log("getUser error :",err);
-    }finally{
-        isLoading.value=false;
+        console.log("sendCode error :", error);
+    } finally {
+        isLoading.value = false;
     }
 }
 
-
-async function register(){
-    if(!validateForm()){
-        return ;
+async function register() {
+    if (!validateForm()) {
+        return;
     }
 
-    isLoading.value=true;
+    isLoading.value = true;
     const request = new AuthRequest(
         registerRequest.value.nickname,
         !registerRequest.value.accountType ? registerRequest.value.account : null,
@@ -324,25 +343,26 @@ async function register(){
         registerRequest.value.password
     );
 
-    try{
+    try {
         const response = await auth.register(request);
-        if(response){
-            const token = response.token;
-            const id = response.id;
+        console.log(response);
+        if (response) {
+            const token = response.data.token;
+            const id = response.data.id;
             setToken(token);
             await getUserData(id);
             successful("注册成功 正在跳转主页");
-            router.replace({path:"/"});
+            router.replace({ path: "/" });
         }
-    }catch(error){
-        if(err.response){
-            erroring(err.response.data.message);
-        }else{
+    } catch (error) {
+        if (error.response) {
+            erroring(error.response.data.message);
+        } else {
             erroring("网络错误，请稍后再试");
         }
-        console.log("getUser error :",err);
-    }finally{
-        isLoading.value=false;
+        console.log("register error :", error);
+    } finally {
+        isLoading.value = false;
     }
 }
-</script>
+</script>    

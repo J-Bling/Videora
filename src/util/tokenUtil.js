@@ -32,6 +32,6 @@ export function setToken(token){
 }
 
 export function removeToken(){
-    localStorage.removeItem(tokenItem);
+    localStorage.clear();
     document.cookie=`${tokenItem}=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 }

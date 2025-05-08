@@ -1,29 +1,29 @@
 <template>
-    <div class="auth-container">
+  <div class="official-auth-container">
       <el-button link @click="dialogVisible = true">登录/注册</el-button>
       <el-dialog
-        v-model="dialogVisible"
-        :title="isLogin ? '登录' : '注册'"
-        width="450px"
-        class="auth-dialog"
+          v-model="dialogVisible"
+          :title="isLogin ? '登录' : '注册'"
+          width="450px"
+          class="official-auth-dialog"
       >
-        <component 
-          :is="currentComponent"
-          @close="dialogVisible = false"
-          ref="authComponentRef"
-        />
-        <div class="auth-switch">
-          {{ isLogin ? '还没有帐号？' : '已有帐号？' }}
-          <el-link 
-            type="primary" 
-            @click="toggleAuth"
-            style="margin-left: 8px"
-          >
-            {{ isLogin ? '立即注册' : '立即登录' }}
-          </el-link>
-        </div>
+          <component 
+              :is="currentComponent"
+              @close="dialogVisible = false"
+              ref="authComponentRef"
+          />
+          <div class="official-auth-switch">
+              {{ isLogin ? '还没有帐号？' : '已有帐号？' }}
+              <el-link 
+                  type="primary" 
+                  @click="toggleAuth"
+                  style="margin-left: 8px"
+              >
+                  {{ isLogin ? '立即注册' : '立即登录' }}
+              </el-link>
+          </div>
       </el-dialog>
-    </div>
+  </div>
 </template>
 
 <script setup>
@@ -39,43 +39,60 @@ const loginComponent = shallowRef(LoginComponent)
 const registerComponent = shallowRef(RegisterComponent)
 
 const currentComponent = computed(() => 
-    isLogin.value ? loginComponent.value : registerComponent.value
+  isLogin.value ? loginComponent.value : registerComponent.value
 )
 
 const toggleAuth = async () => {
-    isLogin.value = !isLogin.value
-    await nextTick()
-    if (authComponentRef.value?.clearForm) {
-    authComponentRef.value.clearForm()
-    }
+  isLogin.value = !isLogin.value
+  await nextTick()
+  if (authComponentRef.value?.clearForm) {
+      authComponentRef.value.clearForm()
+  }
 }
 </script>
 
 <style scoped>
-.auth-dialog {
+.official-auth-container {
+  color: #007bff;
+}
+
+.official-auth-dialog {
   :deep(.el-dialog) {
-    height: 500px !important;
-  }
-  
-  :deep(.el-dialog__body) {
-    height: calc(100% - 54px) !important;
-    padding: 20px 30px;
-    overflow-y: auto; 
-    display: flex;
-    flex-direction: column;
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-  .auth-switch {
-    margin-top: auto; 
-    padding-top: 20px; 
-    text-align: center;
+  :deep(.el-dialog__body) {
+      padding: 20px 30px;
+      color: #333;
+  }
+
+  .official-auth-switch {
+      margin-top: 20px; 
+      text-align: center;
   }
 }
 
 .el-button--text {
-    padding: 0;
-    &:hover {
-        background: transparent;
-    }
+  padding: 0;
+  color: #007bff;
+  transition: all 0.3s;
+
+  &:hover {
+      background: transparent;
+      color: #0056b3;
+      transform: scale(1.02);
+  }
 }
-</style>
+
+.el-link {
+  color: #007bff;
+  transition: all 0.3s;
+
+  &:hover {
+      color: #0056b3;
+      text-decoration: underline;
+  }
+}
+</style>    

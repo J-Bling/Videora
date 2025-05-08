@@ -12,6 +12,10 @@ const routes=[
         component:()=>import("../pages/video/Video.vue")
     },
     {
+        path : "/video-detail/:videoId",
+        component : ()=>import("../pages/video/VideoDetail.vue")
+    },
+    {
         path:"/direct-seeding",
         component:()=>import("../pages/direct-seeding/DirectSeeding.vue")
     },
@@ -29,8 +33,46 @@ const routes=[
     },
     {   
         path: '/login',
-        component: ()=>import("../components/auth/auth.vue") 
+        component: ()=>import("../components/auth/LoginForm.vue") 
     },
+    {
+        path : '/register',
+        component :()=>import("../components/auth/RegisterForm.vue")
+    },
+    {
+        path:"/popularity-ranking",
+        component:()=>import("../pages/video/PopularityRanking.vue")
+    },
+    {
+        path:"/dynamic",
+        component:()=>import("../pages/dynamic/Dynamic.vue")
+    },
+    {
+        path:"/message",
+        component:()=>import('../pages/message/Message.vue'),
+        children:[
+            {
+                path:"reply",
+                component:()=>import("../pages/message/child/Reply.vue")
+            },
+            {
+                path:"like",
+                component:()=>import("../pages/message/child/Like.vue")
+            },
+            {
+                path:"system",
+                component:()=>import('../pages/message/child/System.vue')
+            },
+            {
+                path:"server",
+                component:()=>import('../pages/message/child/Server.vue')
+            },
+            {
+                path:"letter",
+                component:()=>import("../pages/message/child/Letter.vue")
+            }
+        ]
+    }
 ];
 
 const router=createRouter({

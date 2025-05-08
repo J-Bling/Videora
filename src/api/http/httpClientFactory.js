@@ -1,25 +1,45 @@
 import axios from 'axios';
 import { getToken } from '../../util/tokenUtil.js';
-// import interceptor from './interceptor.js';
 
-class axiosFactory{
-    constructor(conentType){
-        let type =conentType || "application/json"
+class AxiosFactory {
+    constructor(contentType) {
+        let type = contentType || "application/json";
         this.client = axios.create({
-            timeout : 10000,
-            headers:{"X-Uskey" : getToken(),"Content-Type:" : type}
+            timeout: 10000,
+            headers: {
+                "X-Uskey": getToken(),
+                "Content-Type": type
+            }
         });
 
-        // interceptor(this.client);
+        this.client.interceptors.request.use(
+            (config) => {
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
+            }
+        );
+
+        this.client.interceptors.response.use(
+            (response) => {
+                return response;
+            },
+            (error) => {
+                if (error.response) {
+                    // console.log("response :",error.response);
+                }
+                return Promise.reject(error);
+            }
+        );
     }
 
-
-    getClient(){
+    getClient() {
         return this.client;
     }
 }
 
-const factory = new axiosFactory();
+const factory = new AxiosFactory();
 const client = factory.getClient();
 
 export default client;

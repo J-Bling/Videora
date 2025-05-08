@@ -158,6 +158,19 @@ class VideoApi{
             throw err;
         }
     }
+
+    /**
+     * 
+     * @returns {VideoDataResponse[]}
+     */
+    async getHottestVideo(){
+        try{
+            const res = await client.get("/api/public/videos/hottest");
+            return res.data.data;
+        }catch(err){
+            throw err;
+        }
+    }
 }
 
 export const videoDataApi = new VideoApi();

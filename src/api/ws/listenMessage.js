@@ -3,7 +3,7 @@ export class WebSocketMessage{
         if(!token){
             throw new Error("token is not allow null");
         }
-        this.url = `ws://${window.location.host}/api/ws/chat?token=${token}`;
+        this.url = `/ws/api/ws/chat?token=${token}`;
         this.socket=null;
         this.reconnectSize=0;
     }   

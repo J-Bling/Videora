@@ -1,10 +1,13 @@
 
-export class WebScoketNotification{
+class WebScoketNotification{
+    /**
+     * @param {String} token 
+     */
     constructor(token){
         if(!token) {
             throw new Error("token is not allow null");
         }
-        this.url=`ws://${window.location.host}/api/ws/push?token=${token}`;
+        this.url=`/ws/api/ws/push?token=${token}`;
         this.socket=null;
         this.reconnectionSize=0;
     }
@@ -28,11 +31,12 @@ export class WebScoketNotification{
                     }catch(err){
                         console.error("JSON parse fail : ",err);
                     }
-                    
                 }
 
                 this.socket.onclose=(event)=>{
+                    console.log("ws close and reLinking ",this.reconnectionSize);
                     if(this.reconnectionSize++<5){
+                        this.socket=null;
                         setTimeout(()=>this.connect(callback),2000);
                     }
                 }
@@ -46,6 +50,7 @@ export class WebScoketNotification{
 
     close(){
         this.socket.close();
+        console.log("close ws");
     }
 
     /**
@@ -53,17 +58,26 @@ export class WebScoketNotification{
      */
     isReadNotification(request){
         try{
-            this.socket(JSON.stringify(request));
+            console.log(request);
+            this.socket.send(JSON.stringify(request));
         }catch(err){
             console.error("callback notification message faile : ",err);
         }
     }
 }
 
+/**
+ * @param {String} token 
+ * @returns {WebScoketNotification}
+ */
+export function getScoket(token){
+    return new WebScoketNotification(token);
+}
+
 export class MessageRequestOfRead{
     /**
      * @param {Number} userId 
-     * @param {Number[]} messageIds 
+     * @param {String[]} messageIds 
      */
     constructor(userId,messageIds){
         this.userId=userId || null;
